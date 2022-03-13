@@ -9,9 +9,6 @@ void setup()
   Serial.begin(115200);
   delay(1000);
 
-  Wire.begin();
-  Wire.setClock(100000ul);
-
   Serial1.begin(115200);
 
   Serial.println(F("Welcome."));
