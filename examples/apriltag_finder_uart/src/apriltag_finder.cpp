@@ -12,7 +12,7 @@ void setup()
   Wire.begin();
   Wire.setClock(100000ul);
 
-  Serial2.begin(115200);
+  Serial1.begin(115200);
 
   Serial.println(F("Welcome."));
 }
