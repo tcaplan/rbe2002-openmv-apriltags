@@ -11,9 +11,9 @@
 
 import sensor, image, time, math, struct, omv
 
-#adding UART capability
+#adding UART capability -- edit UART() for your choice of UART
 import pyb, ustruct
-uart = pyb.UART(3, 115200, timeout_char = 50)
+uart = pyb.UART(1, 115200, timeout_char = 50)
 
 #say hello
 uart.write("Hej, verden!!\n")
