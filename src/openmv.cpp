@@ -50,9 +50,9 @@ bool OpenMV::readTag(AprilTagDatum& tag)
 bool OpenMV::checkUART(AprilTagDatum& tag)  
 {
   bool retVal = false;
-  while(Serial2.available())
+  while(Serial1.available())
   {
-    uint8_t b = Serial2.read();
+    uint8_t b = Serial1.read();
     if(handleUART(b))
     {
       memcpy(&tag, &mvArray, 16);
