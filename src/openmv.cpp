@@ -34,7 +34,7 @@ bool OpenMV::readTag(AprilTagDatum& tag)
 
     uint8_t buffer[sizeof(AprilTagDatum)];
     //use some explicit casts to suppress warnings
-    if (Wire.requestFrom(CAMERA_I2C_ADDRESS, (uint8_t)sizeof(AprilTagDatum), true) == sizeof(AprilTagDatum))
+    if (Wire.requestFrom(CAMERA_I2C_ADDRESS, sizeof(AprilTagDatum), true) == sizeof(AprilTagDatum))
     {
       for(uint8_t i = 0; i < sizeof(AprilTagDatum); i++) buffer[i] = Wire.read();
       memcpy(&tag, buffer, sizeof(AprilTagDatum));

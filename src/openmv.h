@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define CAMERA_I2C_ADDRESS ((uint16_t)0x12) //explicit cast to keep compiler warnings down
+#define CAMERA_I2C_ADDRESS 0x12
 
 #include <apriltagdatum.h>
 
