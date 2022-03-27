@@ -2,7 +2,7 @@ Demonstrates communication with an Open MV camera using I2C.
 
 Pair with `openmv_scripts/apriltags_i2c.py`.
 
-See `images/camera-h7-pinout.png` for pinout of the Open MV camera (go to [[openmv.io]] for other camera versions). Defaults to I2C 2.
+See the pinout of the OpenMV camera in the root of this repo (go to [[openmv.io]] for other camera versions).
 
 The OpenMV camera is both 3.3V and 5V tolerant -- no need for level shifters.
 
