@@ -1,4 +1,4 @@
-Edited version of the example python scripts from OpenMV.
+Edited versions of the example python scripts from OpenMV.
 
 Both uart and i2c versions have been tested with their uC counterparts (`examples/apriltag_finder_x`) for a single tag. Untested for multiple tags.
 
