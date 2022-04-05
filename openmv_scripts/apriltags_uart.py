@@ -46,7 +46,7 @@ def checksum(data):
     return checksum & 0xFFFF
 
 def to_object_block_format(tag):
-    angle = int((tag.rotation() * 180) // math.pi)
+    angle = int((tag.rotation() * 180) / math.pi)
     temp = struct.pack("<hhhhhh", tag.id(), tag.cx(), tag.cy(), tag.w(), tag.h(), angle)
     return struct.pack("<bbh12sb", 0xFF, 0x55, checksum(temp), temp, 0xAA)
 
