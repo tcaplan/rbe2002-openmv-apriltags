@@ -2,7 +2,7 @@ Demonstrates communication with an Open MV camera using UART.
 
 Pair with `openmv_scripts/apriltags_uart.py`.
 
-See the pinout of the Open MV camera in the root of this repo (go to [[openmv.io]] for other camera versions).
+See the pinout of the Open MV camera in the root of this repo (go to https://openmv.io for other camera versions).
 
 The OpenMV camera is both 3.3V and 5V tolerant -- no need for level shifters.
 
