@@ -51,7 +51,7 @@ def checksum(data):
     return checksum & 0xFFFF
 
 def to_object_block_format(tag):
-    angle = int((tag.rotation() * 180) // math.pi)
+    angle = int((tag.rotation() * 180) / math.pi)
     temp = struct.pack("<hhhhhh", tag.id(), tag.cx(), tag.cy(), tag.w(), tag.h(), angle)
     return struct.pack("<hh12s", 0xAA56, checksum(temp), temp)
 
@@ -61,7 +61,7 @@ clock = time.clock()
 while(True):
     clock.tick()
     img = sensor.snapshot()
-    tags = img.find_apriltags(families=image.TAG16H5) # default TAG36H11 family
+    tags = img.find_apriltags(families=image.TAG16H5) # default TAG16H5 family
 
     # Transmit Tags #
 
@@ -78,9 +78,9 @@ while(True):
             img.draw_rectangle(tag.rect())
             img.draw_cross(tag.cx(), tag.cy())
 
-        # dat_buf += struct.pack("<h", 0x0000)
-#        write(dat_buf) # write all data in one packet...
-        interface.put_bytes(dat_buf, timeout_ms = 200)
+            # dat_buf += struct.pack("<h", 0x0000)
+            # write(dat_buf) # write all data in one packet...
+            interface.put_bytes(dat_buf, timeout_ms = 200)
 
     num_tags = min(len(tags), max_blocks)
     print("%d tags(s) found - FPS %f" % (num_tags, clock.fps()))
