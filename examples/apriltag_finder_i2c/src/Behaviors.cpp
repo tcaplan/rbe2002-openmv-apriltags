@@ -2,7 +2,7 @@
 #include "Speed_controller.h"
 #include "turn_controller.h"
 #include "Position_estimation.h"
-#include "apriltag_finder.h"
+#include "mycamera.h"
 
 //sensors
 Romi32U4ButtonA buttonA;
@@ -11,11 +11,18 @@ Romi32U4ButtonA buttonA;
 SpeedController PIController;
 TurnController PDController;
 
+int speed_distance = 0;
+int speed_turn = 0;
+AprilTagDatum tag;
+int count = 0;
+int max = 50;
+
 MyCamera camera; 
 
 void Behaviors::Init(void)
 {
-    camera.setup();
+    tag.id = 10000;
+    camera.Init();
     PIController.Init(&camera);
     PDController.Init(&camera);
 }
@@ -27,13 +34,28 @@ void Behaviors::Stop(void)
 
 void Behaviors::Run(void)
 {
+
+    AprilTagDatum temp = camera.getTag();
+    if(temp.id < 10000 || count > max) {
+        tag = temp;
+        count = 0;
+    } else {
+        count++;
+    }
+    // Serial.print(id);
+    // Serial.print("\t"); 
+    // Serial.println(temp);
+
+    // camera.printTagData();
+
     switch (robot_state)
     {
     case IDLE:
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = FIND_TAG; 
             PIController.Stop();             
-            PIController.Init(&camera);             
+            PIController.Init(&camera);    
+            Serial.println("Entering FIND_TAG");         
         } 
         else { 
             robot_state = IDLE;
@@ -44,10 +66,14 @@ void Behaviors::Run(void)
     case FIND_TAG:
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = IDLE;
-            PIController.Stop();             
-        } else if (camera.FindAprilTags() > 0 && camera.getID() == 4) {
+            PIController.Stop();  
+            Serial.println("Entering IDLE");         
+           
+        } else if (tag.id == 4) {
             robot_state = FOLLOW_TAG;
+            Serial.println("Entering FOLLOW_TAG");         
         } else {
+            // Serial.println( "Looking");
             PIController.Turn(10, 1);
             PIController.Stop();
         }
@@ -55,18 +81,28 @@ void Behaviors::Run(void)
     case FOLLOW_TAG:
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = IDLE;
-            PIController.Stop();             
-        } else if (camera.FindAprilTags() > 0 && camera.getID() == 4) {
+            PIController.Stop();
+            Serial.println("Entering IDLE");                      
+        } else if (tag.id == 4) {
             // FOLLOW AT 20 cm, 4cm tag
-            int speed_distance = PIController.RunTo(20, 4);
+            speed_distance = PIController.RunTo(20, 4, tag);
             
-            int speed_turn = PDController.Process();
+            speed_turn = PDController.Process(tag);
 
             PIController.Run(speed_distance + speed_turn, speed_distance - speed_turn); //speed in [[mm/s]]
 
+            Serial.print(speed_distance);
+            Serial.print("\t");
+            Serial.print(speed_turn);
+            Serial.print("\t");
+            Serial.print(speed_distance+speed_turn);
+            Serial.print("\t");
+            Serial.println(speed_distance-speed_turn);
+            // Serial.println("Following");
         } else {
             robot_state = FIND_TAG;
             PIController.Stop();
+            Serial.println("Entering FIND_TAG");         
         }
         break;
     }

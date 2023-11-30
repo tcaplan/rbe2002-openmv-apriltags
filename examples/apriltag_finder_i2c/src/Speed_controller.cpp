@@ -2,7 +2,7 @@
 #include "Encoders.h"
 #include  "Speed_controller.h"
 #include "Position_estimation.h"
-// #include "apriltag_finder.h"
+#include "mycamera.h"
 
 Romi32U4Motors motors;
 Encoder MagneticEncoder; 
@@ -15,17 +15,19 @@ void SpeedController::Init(MyCamera* c)
     camera = c;
 }
 
-float SpeedController::RunTo(int target_distance, int tagSize)
+float SpeedController::RunTo(int target_distance, int tagSize, AprilTagDatum tag)
 {
-    if(camera->FindAprilTags()){
-        float e = camera->getDistance(tagSize) - target_distance;
+    if(tag.id != 10000) {
+        // float e = camera->getDistance(tagSize) - target_distance;
+        float e = (tag.w * tag.h) - (30.0 * 30.0);
 
         e_distance += e;
 
-        float u = Kp*e + Ki*e_distance;
+        float u = Kp*e ;//+ Ki*e_distance;
 
         return u;
     }
+    return 0;
 }
 
 void SpeedController::Run(float target_velocity_left, float target_velocity_right)
@@ -91,4 +93,5 @@ void SpeedController::Stop()
 {
     motors.setEfforts(0,0);
     odometry.Stop();
+    e_distance = 0;
 }

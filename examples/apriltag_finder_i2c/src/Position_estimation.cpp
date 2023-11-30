@@ -110,38 +110,6 @@ void Position::UpdatePose(float target_speed_left, float target_speed_right)
         y_t = y_theoretical;
         theta_t = angle_theoretical;
 
-        Serial.print(t);
-        Serial.print("\t");
-        Serial.print(time_now);
-        Serial.print("\t");
-        Serial.print(time_prev);
-        Serial.print("\t|\t");
-
-        Serial.print(target_speed_left);
-        Serial.print("\t");
-        Serial.print(target_speed_right);
-        Serial.print("\t");
-        Serial.print(R_theoretical);
-        Serial.print("\t");
-        Serial.print(angle_theoretical * 180 / PI);
-        Serial.print("\t");
-        Serial.print(x_theoretical);
-        Serial.print("\t");
-        Serial.print(y_theoretical);
-        Serial.print("\t|\t");
-
-        Serial.print(v_left);
-        Serial.print("\t");
-        Serial.print(v_right);
-        Serial.print("\t");
-        Serial.print(R);
-        Serial.print("\t");
-        Serial.print(angle * 180 / PI);
-        Serial.print("\t");
-        Serial.print(x_calculated);
-        Serial.print("\t");
-        Serial.println(y_calculated);
-
         time_prev = time_now;
     }
 }
