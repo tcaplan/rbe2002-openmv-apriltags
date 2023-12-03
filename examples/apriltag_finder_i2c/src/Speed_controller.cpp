@@ -19,11 +19,11 @@ float SpeedController::RunTo(int target_distance, int tagSize, AprilTagDatum tag
 {
     if(tag.id != 10000) {
         // float e = camera->getDistance(tagSize) - target_distance;
-        float e = (tag.w * tag.h) - (30.0 * 30.0);
+        float e = (30.0 * 30.0) - (tag.w * tag.h);
 
         e_distance += e;
 
-        float u = Kp*e ;//+ Ki*e_distance;
+        float u = Kp_d*e ;//+ Ki_d*e_distance;
 
         return u;
     }

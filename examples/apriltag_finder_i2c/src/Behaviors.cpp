@@ -74,7 +74,16 @@ void Behaviors::Run(void)
             Serial.println("Entering FOLLOW_TAG");         
         } else {
             // Serial.println( "Looking");
-            PIController.Turn(10, 1);
+            PIController.Turn(5, 1);
+            delay(500);
+            temp = camera.getTag();
+            if(temp.id < 10000 || count > max) {
+                tag = temp;
+                count = 0;
+            } else {
+                count++;
+            }
+            delay(500);
             PIController.Stop();
         }
         break;
@@ -86,6 +95,8 @@ void Behaviors::Run(void)
         } else if (tag.id == 4) {
             // FOLLOW AT 20 cm, 4cm tag
             speed_distance = PIController.RunTo(20, 4, tag);
+            
+            PIController.Run(speed_distance, speed_distance); //speed in [[mm/s]]
             
             speed_turn = PDController.Process(tag);
 
