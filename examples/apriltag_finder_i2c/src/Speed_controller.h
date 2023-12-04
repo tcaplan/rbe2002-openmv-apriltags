@@ -10,9 +10,11 @@ class SpeedController{
         const float Ki = 0.1; 
         const float Kp_d = 0.2;
         const float Ki_d = 0.1;
+        const float Kd_d = 0.1;
         float E_left = 0; 
         float E_right = 0;
         float e_distance = 0;
+        float e_prev = 0;
         int counts = 1440; //assignment
         MyCamera* camera;
 

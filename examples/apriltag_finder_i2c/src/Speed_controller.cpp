@@ -19,11 +19,21 @@ float SpeedController::RunTo(int target_distance, int tagSize, AprilTagDatum tag
 {
     if(tag.id != 10000) {
         // float e = camera->getDistance(tagSize) - target_distance;
-        float e = (30.0 * 30.0) - (tag.w * tag.h);
+        float e = (33.5 * 33.5) - (tag.w * tag.h);
+        // float e = 33.0 - tag.w;
+
+        Serial.println(tag.w * tag.h);
 
         e_distance += e;
 
-        float u = Kp_d*e ;//+ Ki_d*e_distance;
+        float error_d = e_prev - e;
+
+        float i_temp = min(Ki_d*e_distance, 40);
+        i_temp = max(i_temp, -40);
+
+        float u = Kp_d*e + i_temp + Kd_d * error_d;
+
+        e_prev = u;
 
         return u;
     }
@@ -94,4 +104,5 @@ void SpeedController::Stop()
     motors.setEfforts(0,0);
     odometry.Stop();
     e_distance = 0;
+    e_prev = 0;
 }

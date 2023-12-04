@@ -17,22 +17,26 @@ void TurnController::Init(MyCamera* c)
     camera = c;
 }
 
+void TurnController::Stop() {
+  error_acc = 0;
+  prev_error = 0;
+}
+
 float TurnController::Process(AprilTagDatum tag)
 {
   if(tag.id != 10000) {
     
     error =  tag.cx - (camera->x_max / 2);
-    int e_d = error - prev_error;
+    
+    error_acc += error;
 
-    float speed = Kp * error + Kd * e_d;
+    float error_d = prev_error - error;
+
+    float error_i = min(Ki * error_acc, 10);
+
+    float speed = Kp * error + error_i + Kd * error_d;
 
     prev_error = speed;
-
-    Serial.print(tag.cx);
-    Serial.print("\t");
-    Serial.print(camera->x_max / 2);
-    Serial.print("\t");
-    Serial.println(speed);
 
     return speed;
   }

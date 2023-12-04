@@ -53,13 +53,15 @@ void Behaviors::Run(void)
     case IDLE:
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = FIND_TAG; 
-            PIController.Stop();             
+            PIController.Stop();  
+            PDController.Stop();           
             PIController.Init(&camera);    
             Serial.println("Entering FIND_TAG");         
         } 
         else { 
             robot_state = IDLE;
             PIController.Stop(); 
+            PDController.Stop();
         }   
         break;
     
@@ -67,6 +69,7 @@ void Behaviors::Run(void)
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = IDLE;
             PIController.Stop();  
+            PDController.Stop();
             Serial.println("Entering IDLE");         
            
         } else if (tag.id == 4) {
@@ -74,23 +77,25 @@ void Behaviors::Run(void)
             Serial.println("Entering FOLLOW_TAG");         
         } else {
             // Serial.println( "Looking");
-            PIController.Turn(5, 1);
+            // PIController.Turn(5, 1);
+            // // delay(500);
+            // temp = camera.getTag();
+            // if(temp.id < 10000 || count > max) {
+            //     tag = temp;
+            //     count = 0;
+            // } else {
+            //     count++;
+            // }
             // delay(500);
-            temp = camera.getTag();
-            if(temp.id < 10000 || count > max) {
-                tag = temp;
-                count = 0;
-            } else {
-                count++;
-            }
-            delay(500);
             PIController.Stop();
+            PDController.Stop();
         }
         break;
     case FOLLOW_TAG:
         if(buttonA.getSingleDebouncedRelease()){ 
             robot_state = IDLE;
             PIController.Stop();
+            PDController.Stop();
             Serial.println("Entering IDLE");                      
         } else if (tag.id == 4) {
             // FOLLOW AT 20 cm, 4cm tag
@@ -98,7 +103,8 @@ void Behaviors::Run(void)
             
             PIController.Run(speed_distance, speed_distance); //speed in [[mm/s]]
             
-            speed_turn = PDController.Process(tag);
+            speed_turn = min(PDController.Process(tag), 20);
+            speed_turn = max(speed_turn, -20);
 
             PIController.Run(speed_distance + speed_turn, speed_distance - speed_turn); //speed in [[mm/s]]
 
@@ -113,6 +119,7 @@ void Behaviors::Run(void)
         } else {
             robot_state = FIND_TAG;
             PIController.Stop();
+            PDController.Stop();
             Serial.println("Entering FIND_TAG");         
         }
         break;
