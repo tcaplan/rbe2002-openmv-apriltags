@@ -21,65 +21,21 @@ float TurnController::Process(AprilTagDatum tag)
 {
   if(tag.id != 10000) {
     
-    error = (camera->x_max / 2) - tag.cx;
+    error =  tag.cx - (camera->x_max / 2);
     int e_d = error - prev_error;
 
     float speed = Kp * error + Kd * e_d;
 
     prev_error = speed;
 
-    if(!filled) {
-      index = 0;
-      for(int i = 0; i < SIZE; i++) {
-        speeds[i] = speed;
-      }
-    } else {
-      index++;
-      if(index >= SIZE) index = 0;
-    }
+    Serial.print(tag.cx);
+    Serial.print("\t");
+    Serial.print(camera->x_max / 2);
+    Serial.print("\t");
+    Serial.println(speed);
 
-    speeds[index] = speed;
-    
-    sort(speeds, index);
-
-    index++;
-    if(index >= SIZE) index = 0;
-    
-
-
-    // Serial.print(" [");
-    // for(int i = 0; i < SIZE; i++) {
-    //   Serial.print(speeds[i]);
-    //   if(i != SIZE - 1) {
-    //     Serial.print(", ");
-    //   }
-    // }
-    // Serial.print(" ]\t");
-    //   Serial.print("\tDE ");
-    // Serial.print(speeds[SIZE/2]);
-    return speeds[SIZE/2];
+    return speed;
   }
+
    return 0;
-}
-
-
-void sort(float* arr, int i) {
-
-  bool shiftedDown = false;
-  int j = i;
-  while(j > 0 && arr[j-1] > arr[j]) {
-    float temp = arr[j-1];
-    arr[j-1] = arr[j];
-    arr[j] = temp;
-    j--;
-    shiftedDown = true;
-  }
-  if(!shiftedDown) {
-    j = i;
-    while(j < 5 && arr[j+1] < arr[j]) {
-      float temp = arr[j+1];
-      arr[j+1] = arr[j];
-      arr[j] = temp;
-    }
-  }
 }

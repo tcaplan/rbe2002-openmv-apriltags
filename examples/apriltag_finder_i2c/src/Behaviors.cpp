@@ -15,7 +15,7 @@ int speed_distance = 0;
 int speed_turn = 0;
 AprilTagDatum tag;
 int count = 0;
-int max = 50;
+int max = 60;
 
 MyCamera camera; 
 
@@ -75,7 +75,7 @@ void Behaviors::Run(void)
         } else {
             // Serial.println( "Looking");
             PIController.Turn(5, 1);
-            delay(500);
+            // delay(500);
             temp = camera.getTag();
             if(temp.id < 10000 || count > max) {
                 tag = temp;
@@ -102,13 +102,13 @@ void Behaviors::Run(void)
 
             PIController.Run(speed_distance + speed_turn, speed_distance - speed_turn); //speed in [[mm/s]]
 
-            Serial.print(speed_distance);
-            Serial.print("\t");
-            Serial.print(speed_turn);
-            Serial.print("\t");
-            Serial.print(speed_distance+speed_turn);
-            Serial.print("\t");
-            Serial.println(speed_distance-speed_turn);
+            // Serial.print(speed_distance);
+            // Serial.print("\t");
+            // Serial.print(speed_turn);
+            // Serial.print("\t");
+            // Serial.print(speed_distance+speed_turn);
+            // Serial.print("\t");
+            // Serial.println(speed_distance-speed_turn);
             // Serial.println("Following");
         } else {
             robot_state = FIND_TAG;

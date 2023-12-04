@@ -6,8 +6,8 @@
 
 class TurnController{
     private:
-        const float Kp = .8; //Adapt parameters Kp and Kd until your robot consistently drives along a wall
-        const float Kd = .2;
+        const float Kp = 2.5; //Adapt parameters Kp and Kd until your robot consistently drives along a wall
+        const float Kd = 0.14;
         float error = 0;
         float prev_error = 0;
         MyCamera* camera;
