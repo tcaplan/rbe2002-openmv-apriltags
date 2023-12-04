@@ -3,6 +3,7 @@
 #include  "Speed_controller.h"
 #include "Position_estimation.h"
 #include "mycamera.h"
+#include <math.h>
 
 Romi32U4Motors motors;
 Encoder MagneticEncoder; 
@@ -19,11 +20,26 @@ float SpeedController::RunTo(int target_distance, int tagSize, AprilTagDatum tag
 {
     if(tag.id != 10000) {
         // float e = camera->getDistance(tagSize) - target_distance;
-        float e = (30.0 * 30.0) - (tag.w * tag.h);
+        float e = (32.5 * 32.5) - (tag.h * tag.w);
+
+        if(e < 0) {
+            e = sqrt(-1.0 * e) * -1.0;
+            Serial.print(e);
+        } else {
+            e = sqrt(e);
+        }
 
         e_distance += e;
 
-        float u = Kp_d*e ;//+ Ki_d*e_distance;
+        e_distance = min(e_distance, 60);
+        e_distance = max(e_distance, -60);
+
+        float e_d = e_prev - e;
+
+        float u = Kp_d*e + Kd_d * e_d + Ki_d*e_distance;
+        // if (e < 0) {
+        //     u = Kp2*e;
+        // }
 
         return u;
     }

@@ -8,11 +8,14 @@ class SpeedController{
     private:
         const float Kp = 0.5; //Adapt the parameters until your robot moves at the speed you command it to drive
         const float Ki = 0.1; 
-        const float Kp_d = 0.2;
+        const float Kp_d = 3;
+        const float Kp2 = 0.8;
         const float Ki_d = 0.1;
+        const float Kd_d = 0.2;
         float E_left = 0; 
         float E_right = 0;
         float e_distance = 0;
+        float e_prev = 0;
         int counts = 1440; //assignment
         MyCamera* camera;
 
