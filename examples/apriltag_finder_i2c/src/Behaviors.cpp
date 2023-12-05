@@ -34,7 +34,7 @@ void Behaviors::Stop(void)
 
 void Behaviors::Run(void)
 {
-
+    Serial.println("A change to show git");
     AprilTagDatum temp = camera.getTag();
     if(temp.id < 10000 || count > max) {
         tag = temp;
